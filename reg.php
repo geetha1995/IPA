@@ -11,18 +11,19 @@
     function send_email_verify($fname, $email, $verifyToken)
     {
             //Server settings
-        // $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-          $mail->isSMTP();
-          $mail->Host = 'smtp.gmail.com';
-          $mail->SMTPAuth = true;
-          $mail->SMTPSecure = 'tls';
-          $mail->Port = 25;                                 //Enable SMTP authentication
-          $mail->Username   = 'suvarnanathan@gmail.com';                     //SMTP username
-          $mail->Password   = 'wmsjxxqnhlpaenef';                               //app password
-  
-          //Recipients
-          $mail->setFrom('keethani96@gmail.com');
-        $mail->addAddress($email, $fname);     //Add a recipient
+         // $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+         $mail->isSMTP();
+         $mail->Host = 'smtp.gmail.com';
+         $mail->SMTPAuth = true;
+         $mail->SMTPSecure = 'tls';
+         $mail->Port = 587;                                 //Enable SMTP authentication
+         $mail->Username   = 'keethani96@gmail.com';                     //SMTP username
+         $mail->Password   = 'rkteljhdtnpjlgcn';                               //app password
+ 
+         //Recipients
+         $mail->setFrom('keethani96@gmail.com');
+     $mail->addAddress($email, $fname);     //Add a recipient
+    
 
         $mail->isHTML(true);                                  //Set email format to HTML
         $mail->Subject = 'Email verification';

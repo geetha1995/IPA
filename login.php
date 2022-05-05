@@ -115,7 +115,7 @@ if (isset($_POST['login'])) {
             <div class="col-lg-12 col-md-12 col-sm-12 my-4 ml-4 text-right">
                 <a class="mx-3" href="index.php">no account yet?</a>
                 <a class="border-right border-primary"></a>
-                <a class="mx-3" href="resetpassword.php">reset password</a>
+                <a class="mx-3" href="forgotpassword.php">Forgot password</a>
 
             </div>
         </div>
