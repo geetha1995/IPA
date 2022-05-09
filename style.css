@@ -1,0 +1,23 @@
+.cognizant{
+    color: #000048 !important;
+}
+.border-primary{
+    border-color: #000048 !important;
+}
+.bg-primary{
+    background-color: #000048 !important;
+}
+.cognizant-btn{
+    background-color: #000048 !important;
+    display: inline-block;
+    font-weight: 600;
+    text-align: center;
+    vertical-align: middle;
+    user-select: none;
+    border:0 solid #000048;
+    padding: 1rem 2rem;
+    line-height: 1.5rem;
+    border-radius: 0;
+    color: white !important;
+
+}
