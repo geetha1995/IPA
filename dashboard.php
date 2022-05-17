@@ -1,3 +1,13 @@
+<?php
+// Start the session
+session_start();
+ /* if the user logout already but try to go back using back button
+    user redirects to adminLogin  with message  */
+if (!isset($_SESSION['uname'])) {
+    $_SESSION['login'] = "You have logout already. please login again";
+    header("location:login.php");
+}
+?>
 <!doctype html>
 <html lang="de">
 
@@ -9,13 +19,12 @@
     <link rel="stylesheet" href="https://resources.ctsapprentice.ch/css/main/bootstrap.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-
-
-
+    <link rel="stylesheet" href="style.css"/>
 </head>
 
 <body>
     <div id="wrapper">
+        <!-- include navbar file of user  -->
         <?php include_once('navbar.php'); ?>
 
 
@@ -23,7 +32,8 @@
             <div class="container mt-5 pt-5 w-75">
                 <div class="row mt-5 mb-5">
                     <div class="text-info col-lg-12 col-md-12 col-sm-12">
-                        <h3 class="border-bottom border-primary text-center"> Welcome to Task Tools</h3>
+                         <!-- set a heading in dashboard -->
+                        <h3 class="border-bottom border-primary text-center cognizant"> Welcome to Task Tools</h3>
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -32,13 +42,13 @@
                             <div class="card-header">
                                 Create new Task
                                 <?php
-                                session_start();
+                                // get the logged in userid via the session variable and assign to $id variable
                                 $id = $_SESSION['uname'];
-                                //   echo $id;
 
                                 ?>
                             </div>
                             <div class="card-body">
+                                <!-- button to create the Task-->
                                 <a style="color:white" href="create.php"><button class="btn btn-success card-title"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
                                             <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0z" />
                                         </svg>
@@ -57,6 +67,7 @@
                                 View your Tasklist
                             </div>
                             <div class="card-body">
+                                <!-- button to view the all Task -->
                                 <button class=" btn btn-success card-title" onclick="viewtasks()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
                                         <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />
                                         <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
@@ -72,6 +83,7 @@
                 </div>
             </div>
         </div>
+        <!-- include the file of footer in the dashboard footer -->
         <?php include_once('footer.php'); ?>
 
 
@@ -82,10 +94,12 @@
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script>
             function createtask() {
+                 // link of create a task button.
                 location.href = "create.php";
             }
 
             function viewtasks() {
+                 // link of view all tasks button.
                 location.href = "viewtasks.php";
             }
         </script>

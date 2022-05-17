@@ -1,6 +1,14 @@
 <?php
+// Start the session
 session_start();
+// for the database connection include this file
 include('database.php');
+ /* if the user logout already but try to go back using back button
+    user redirects to adminLogin  with message  */
+if (!isset($_SESSION['uname'])) {
+    $_SESSION['login'] = "You have logout already. please login again";
+    header("location:login.php");
+}
 ?>
 <!doctype html>
 <html lang="de">
@@ -14,26 +22,28 @@ include('database.php');
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css"/>
-
-
 </head>
 
 <body>
 <div id="wrapper">
+       <!-- include navbar file of user  -->
         <?php include_once('navbar.php'); ?>
         <?php
-    $id = $_GET['id'];
-    $user_check = "SELECT * FROM tasks WHERE id='$id' LIMIT 1";
-    $result = mysqli_query($conn, $user_check);
-    $task = mysqli_fetch_array($result);
-    ?>
+        // get the id of user from url
+        $id = $_GET['id'];
+        // fetch tasks by id
+        $user_check = "SELECT * FROM tasks WHERE id='$id' LIMIT 1";
+        $result = mysqli_query($conn, $user_check);
+        $task = mysqli_fetch_array($result);
+        ?>
         <div class="col-sm-12 col-lg-12 col-md-12">
             <div class="container mt-5 pt-5 w-75">
                 <div class="row">
                     <div class="col-lg-6 col-md-12 col-sm-12">
-                        <h2 class="mt-3 primär">View single Task</h2>
+                        <h2 class="mt-3 cognizant">View single Task</h2>
                     </div>
                     <div class="col-lg-6 col-md-12 col-sm-12 text-right">
+                        <!-- button for view all created tasks -->
                         <button class="mt-2 btn btn-success" onclick="viewtasks()">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
                             <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z"/>
@@ -43,6 +53,7 @@ include('database.php');
                     </div>
                 </div>
                 <hr class="border-primary">
+                <!-- all details of one selected task -->
                 <div class="form-group">
                         <label>Taskname :</label>
                         <p><b><?php echo $task["taskName"]; ?></b></p>
@@ -87,7 +98,8 @@ include('database.php');
                         <label>Entry Date :</label>
                         <p><b><?php echo $task["entryDate"]; ?></b></p>
                     </div>
-                    <p><a href="viewtasks.php" class="btn btn-primary">Back</a></p>
+                    <!-- Back Button for go to back in to the view all Tasks file-->
+                    <a href="viewtasks.php" class="cognizant-btn">Back</a>
 
             </div>
         </div>
@@ -99,6 +111,7 @@ include('database.php');
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script>
 function viewtasks(){
+// link of view task button.
 location.href = "viewtasks.php";
 }
 </script>

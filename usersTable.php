@@ -1,21 +1,10 @@
 <?php
+// for the database connection include this file
 include('database.php');
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
-// $sql="CREATE TABLE parent (
-//     id INT NOT NULL,
-//     PRIMARY KEY (id)
-// ) ";
 
-// $sql2="CREATE TABLE child (
-//     id INT,
-//     parent_id INT,
-//     INDEX par_ind (parent_id),
-//     FOREIGN KEY (parent_id)
-//         REFERENCES parent(id)
-//         ON DELETE CASCADE
-// ) ";
 // sql to create users table
 $sql = "CREATE TABLE users (
 id INT NOT NULL AUTO_INCREMENT,
@@ -29,9 +18,9 @@ password varchar(100) NOT NULL,
 PRIMARY KEY (id)
 
 )";
- 
-// // // sql to create users table
- $sql2 = "CREATE TABLE tasks (
+
+// sql to create tasks table
+$sql2 = "CREATE TABLE tasks (
 id INT AUTO_INCREMENT ,
 user_Id int,
 
@@ -50,7 +39,8 @@ user_Id int,
 
         
          )";
-          
+
+
 if (mysqli_query($conn, $sql)) {
     echo "users created successfully";
 } else {
@@ -62,12 +52,10 @@ if (mysqli_query($conn, $sql2)) {
     echo "Error creating table: " . mysqli_error($conn);
 }
 
+// for the security purpose password is encrypted
+$password = md5('password'); 
+//insert admin data into users table
+$query = "INSERT INTO users (firstname,lastname,empId, email, password,role_id,status) 
+         VALUES('Cognizant','Admin','123123', 'keethani@hotmail.com', '$password','1','1')";
+$query_run = mysqli_query($conn, $query);
 mysqli_close($conn);
-
-    // if (mysqli_query($conn, $sql2)) {
-    //     echo "tasks created successfully";
-    // } else {
-    //     echo "Error creating table: " . mysqli_error($conn);
-    // }
-    
-    // mysqli_close($conn);

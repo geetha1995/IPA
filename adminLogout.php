@@ -1,5 +1,8 @@
 <?php
+// Start the session
 session_start();
-unset($_SESSION['uname']);
-header("Location:adminLogin.php");
+// remove loggedin user id from session
+unset($_SESSION['uname']); 
+// redirect to admin Login
+header("Location:adminLogin.php"); 
 ?>

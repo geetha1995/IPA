@@ -1,6 +1,14 @@
 <?php
+// Start the session
 session_start();
+// for the database connection include this file
 include('database.php');
+ /** if the user logout already but try to go back using back button
+  *  user redirects to login  with message  */
+if (!isset($_SESSION['uname'])) {
+    $_SESSION['login'] = "You have logout already. please login again";
+    header("location:login.php");
+}
 ?>
 <!doctype html>
 <html lang="de">
@@ -13,15 +21,15 @@ include('database.php');
     <link rel="stylesheet" href="https://resources.ctsapprentice.ch/css/main/bootstrap.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-
-
-
+    <link rel="stylesheet" href="style.css"/>
 </head>
 
 <body>
     <?php
-    $id = $_GET['id'];
-    $user_check = "SELECT * FROM tasks WHERE id='$id' LIMIT 1";
+    // get the id from the url
+    $id = $_GET['id']; 
+    //recieve the task which belongst to the particular id 
+    $user_check = "SELECT * FROM tasks WHERE id='$id' LIMIT 1"; 
     $result = mysqli_query($conn, $user_check);
     $task = mysqli_fetch_array($result);
     ?>
@@ -36,35 +44,36 @@ include('database.php');
     $status = "";
     $userId = "";
     $entryDate = "";
-
-    $name_error = $originOfTask_error = $description_error = $deadline_error   = '';
+    // define variables and set to empty values
+    $name_error =$hrs_error=$minutes_error= $originOfTask_error = $description_error = $deadline_error   = '';
+    //
     $uname=  $_SESSION['uname'];
 
-    // REGISTER USER
+    // update the task details
     if (isset($_POST['update'])) {
-                //     // receive all input values from the form
+        // receive all input values from the form
         $name =  $_POST['name'];
-         $originOfTask =  $_POST['originOfTask'];
+        $originOfTask =  $_POST['originOfTask'];
         $description =  $_POST['description'];
         $hours =  $_POST['hours'];
         $minutes =  $_POST['minutes'];
         $deadline =  $_POST['deadline'];
         $status =  $_POST['status'];
         $Id =  $_POST['Id'];
-        // $entryDate =  $_POST['entry_date'];
 
 
 
-
+            // update the task using query
             $update="update tasks set taskName='$name',
             description='$description', user_Id='$uname',hours='$hours',minutes='$minutes',deadline='$deadline',status='$status'  
-            where id=$Id";
+            where id=$Id"; 
             $query_run = mysqli_query($conn, $update);
-            if ($query_run) {
+            if ($query_run) { 
+                // if the update success full redirect to viewtasks
                 header("location:viewtasks.php");
                 $name = "";
                 $originOfTask = "";
-                $description    = "";
+                $description    = ""; 
                 $hours = "";
                 $minutes = "";
                 $deadline = "";
@@ -78,16 +87,17 @@ include('database.php');
 
     ?>
     <div id="wrapper">
-        <?php include_once('navbar.php'); ?>
+        <?php include_once('navbar.php'); ?> 
 
         <div class="col-sm-12 col-lg-12 col-md-12">
             <div class="container mt-5 pt-5 w-75">
                 <div class="row">
                     <div class="col-lg-6 col-md-12 col-sm-12">
-                        <h2 class="mt-3">Edit Task</h2>
+                        <h2 class="mt-3 cognizant">Edit Task</h2>
                     </div>
                     <div class="col-lg-6 col-md-12 col-sm-12 text-right">
-                        <button class="mt-2 btn btn-outline-primary" onclick="viewtasks()">
+                           <!-- button for view all created tasks -->
+                        <button class="mt-2 cognizant-btn" onclick="viewtasks()">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
                                 <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />
                                 <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
@@ -103,23 +113,25 @@ include('database.php');
                                
                                 <div class="col-lg-12 col-md-12 col-sm-12 py-3  py-3">
                                     <label>Taskname*</label>
-                                    <input class="form-control" name="name" type="text" value="<?php echo $task['taskName']?>" id="Taskname" placeholder="Taskname">
-                               <?php if(isset($originOfTask)) echo $originOfTask?>
+                                    <!-- set the existing value of taskName -->
+                                    <input class="form-control" name="name" type="text" value="<?php echo $task['taskName']?>" id="Taskname" placeholder="Taskname"> 
                                 </div>
                             </div>
                             <div class="form row mt-2">
                                 <div class="col-lg-12 col-md-12 col-sm-3 py-3 py-3">
                                     <label>Origin of Task*</label>
                                     <select id="originOfTask" class="custom-select" name="originOfTask">
-                                        <option value="1" <?php echo $task['origin_task_id'] == '1' ? 'selected' : '' ?>>Company</option>
-                                        <option value="2"<?php echo $task['origin_task_id'] == '1' ? 'selected' : '' ?>>School</option>
+                                        <!-- if the particular task origin task is equal to 1 selected value is company else school -->
+                                        <option value="1" <?php echo $task['origin_task_id'] == '1' ? 'selected' : '' ?>>Company</option> 
+                                        <option value="2"<?php echo $task['origin_task_id'] == '2' ? 'selected' : '' ?>>School</option>
                                     </select>
                                 </div>
                             </div>
-                            <input type="hidden" name="Id" value="<?php echo $id ?>">
+                            <!-- pass task id to the update query via hidden value -->
+                            <input type="hidden" name="Id" value="<?php echo $id ?>"> 
                             <div class="form row">
                                 <div class="col-lg-12 col-md-12 col-sm-12 py-3">
-                                    <label>description*</label>
+                                    <label>description</label>
                                     <textarea id="productdescription" name="description" class="form-control" rows="1" placeholder="description of your task"><?php echo $task['description'] ?></textarea>
                                 </div>
                             </div>
@@ -127,11 +139,13 @@ include('database.php');
                             <div class="form row">
                                 <div class="col-lg-6 col-md-12 col-sm-12 py-3 py-3">
                                     <label>Task hours*</label>
-                                    <input class="form-control" name="hours" type="text" value="<?php echo $task['hours'] ?>" id="hours" placeholder=00>
+                                     <!-- task hours should be greater than or equal to 0 -->
+                                    <input class="form-control" name="hours" type="number" min="0" value="<?php echo $task['hours'] ?>" id="hours" placeholder=00>
                                 </div>
                                 <div class="col-lg-6 col-md-12 col-sm-12 py-3 py-3">
                                     <label>Task Minutes*</label>
-                                    <input class="form-control" name="minutes" type="text" value="<?php echo $task['minutes'] ?>" id="Minutes" placeholder=00>
+                                    <!-- task minutes should be greater than or equal to 0 -->
+                                    <input class="form-control" name="minutes" type="number" min="0" value="<?php echo $task['minutes'] ?>" id="Minutes" placeholder=00>      
                                 </div>
                             </div>
                             <div class="form row mt-2">
@@ -155,7 +169,9 @@ include('database.php');
 
                                 <div class="col-lg-6 col-md-12 col-sm-3 py-3">
                                     <label>Task entry date*</label>
+                                     <!-- entry date is disbaled no one can change it -->
                                     <input class="form-control"  disabled name="entry_date" type="text" value="<?php echo $task['entryDate'] ?>" id="entrydate" >
+                              
                                 </div>
                             </div>
                             <div class="row">
@@ -163,12 +179,9 @@ include('database.php');
                                     *mandatory fields
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-lg-6 col-md-6 col-sm-12 py-4 text-left" id="createtasksuccessmessage">
-
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-sm-12 py-3 text-right">
-                                    <button type="submit" name="update" class="btn btn-outline-success"> Save
+                                <div class="col-lg-12 col-md-12 col-sm-12 py-3 text-right">
+                                     <!-- Button for submit the edit form-->
+                                    <button type="submit" name="update" class="btn btn-success"> Save
                                     </button>
                                 </div>
 
@@ -180,7 +193,7 @@ include('database.php');
             </div>
         </div>
     </div>
-    <!-- /#page-content-wrapper -->
+    <!-- page-content-wrapper -->
     </div>
     </div>
 
@@ -192,6 +205,7 @@ include('database.php');
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script>
         function viewtasks() {
+            // link of admin view task button.
             location.href = "viewtasks.php";
         }
     </script>

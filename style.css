@@ -1,12 +1,16 @@
+/* spezific text color of Cognizant */
 .cognizant{
     color: #000048 !important;
 }
+/* spezific border color of Cognizant */
 .border-primary{
     border-color: #000048 !important;
 }
+/* spezific background color of Cognizant */
 .bg-primary{
     background-color: #000048 !important;
 }
+/* spezific button color of Cognizant */
 .cognizant-btn{
     background-color: #000048 !important;
     display: inline-block;
